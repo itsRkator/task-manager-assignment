@@ -33,7 +33,7 @@ A robust NestJS backend service for managing tasks with JWT authentication, buil
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/itsRkator/task-manager-assignment.git
    cd task-manager-assignment
    ```
 
