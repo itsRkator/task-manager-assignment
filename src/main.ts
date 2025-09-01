@@ -5,7 +5,7 @@ import * as morgan from 'morgan';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Security middleware
@@ -30,6 +30,6 @@ async function bootstrap() {
   app.enableCors();
 
   await app.listen(process.env.PORT ?? 3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Application is running on port ${process.env.PORT ?? 3000}`);
 }
 void bootstrap();

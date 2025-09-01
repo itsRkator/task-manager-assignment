@@ -50,11 +50,18 @@ export class TasksService {
   }
 
   async findOne(id: string, userId: string): Promise<Task> {
-    const task = await this.taskModel.findOne({ _id: id, userId });
-    if (!task) {
-      throw new NotFoundException('Task not found');
+    try {
+      const task = await this.taskModel.findOne({ _id: id, userId });
+      if (!task) {
+        throw new NotFoundException('Task not found');
+      }
+      return task;
+    } catch (error) {
+      if (error.name === 'CastError') {
+        throw new NotFoundException('Task not found');
+      }
+      throw error;
     }
-    return task;
   }
 
   async update(
@@ -62,21 +69,35 @@ export class TasksService {
     updateTaskDto: UpdateTaskDto,
     userId: string,
   ): Promise<Task> {
-    const task = await this.taskModel.findOneAndUpdate(
-      { _id: id, userId },
-      updateTaskDto,
-      { new: true },
-    );
-    if (!task) {
-      throw new NotFoundException('Task not found');
+    try {
+      const task = await this.taskModel.findOneAndUpdate(
+        { _id: id, userId },
+        updateTaskDto,
+        { new: true },
+      );
+      if (!task) {
+        throw new NotFoundException('Task not found');
+      }
+      return task;
+    } catch (error) {
+      if (error.name === 'CastError') {
+        throw new NotFoundException('Task not found');
+      }
+      throw error;
     }
-    return task;
   }
 
   async remove(id: string, userId: string): Promise<void> {
-    const result = await this.taskModel.deleteOne({ _id: id, userId });
-    if (result.deletedCount === 0) {
-      throw new NotFoundException('Task not found');
+    try {
+      const result = await this.taskModel.deleteOne({ _id: id, userId });
+      if (result.deletedCount === 0) {
+        throw new NotFoundException('Task not found');
+      }
+    } catch (error) {
+      if (error.name === 'CastError') {
+        throw new NotFoundException('Task not found');
+      }
+      throw error;
     }
   }
 }
